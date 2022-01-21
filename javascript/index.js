@@ -20,16 +20,25 @@ function printTime() {
 }
 
 function printMinutes() {
-  //want to get the minutes when we push button/ in digi format/computeTwoDigitNumber(value)
-  //what is value? this.minutes --> chronometer.minutes
-  let minutes = chronometer.computeTwoDigitNumber(chronometer.getMinutes());
-  return minutes;
+ let minutesArr = chronometer.getMinutes().toString().split('');
+ if (minutesArr.length === 1){
+   minDecElement.innerHTML = 0;
+   minUniElement.innerHTML = minutesArr[0];
+ }else if (minutesArr.length === 2){
+   minUniElement.innerHTML = minutesArr[1];
+   minDecElement.innerHTML = minutesArr[0];
+ }
 }
 
 function printSeconds() {
-
-  let seconds = chronometer.computeTwoDigitNumber(chronometer.getSeconds());
-  return seconds;
+  let secondsArr = chronometer.getSeconds().toString().split('');
+  if (secondsArr.length === 1) {
+    secDecElement.innerHTML = 0;
+    secUniElement.innerHTML = secondsArr[0];
+  } else if (secondsArr.length === 2){
+    secUniElement.innerHTML = secondsArr[1];
+    secDecElement.innerHTML = secondsArr[0];
+  }
 }
 
 // ==> BONUS
@@ -44,15 +53,13 @@ function printSplit() {
 }
 
 function clearSplits() {
-  let seconds = '0';
-  let minutes = '0';
+
 
 }
 
 function setStopBtn() {
   // change innner HTML to Stop/ let current time stop/ 
-  clearIntervalId(chrometer.intervalId);
-  chronometer.intervalId = 0;
+  
 }
 
 function setSplitBtn() {
@@ -60,9 +67,7 @@ function setSplitBtn() {
 }
 
 function setStartBtn() {
-  if (chronometer.intervalId) {
-    chronometer.intervalId = 
-  }
+  
 }
 
 function setResetBtn() {
@@ -73,17 +78,33 @@ function setResetBtn() {
 btnLeftElement.addEventListener('click', () => {
 
   if(btnLeftElement.className === 'btn start') {
-    
-
-  };
-  // ...if press Start Button:
-  //  Button changes to Stop --> add class stop/ in class btn start"
-  //invokes Chronometer to start method 
-  // changes Reset button to switch
-  // computerDigitalNumber 
+    btnLeftElement.className = 'btn stop';
+      btnLeftElement.innerHTML = 'STOP';
+      btnRightElement.className = 'btn split';
+      btnRightElement.innerHTML = 'SPLIT'
+      chronometer.start();
+  }else{
+    btnLeftElement.className = 'btn start';
+    btnLeftElement.innerHTML = 'START'
+    btnRightElement.className = 'btn reset';
+    btnRightElement.innerHTML = 'RESET'
+    chronometer.stop();
+  }
+  setInterval(function(){
+    printSeconds();
+    printMinutes();
+  }, 1000) 
+ 
 });
 
 // Reset/Split Button
 btnRightElement.addEventListener('click', () => {
-  // ... your code goes here
+  if (btnRightElement.className === 'btn split') {
+    const addListElm = document.createElement('li');
+    addListElm.innerHTML = chronometer.split();
+    splitsElement.appendChild(addListElm);
+    } else if (btnRightElement.className === 'btn reset') {
+      splitsElement.innerHTML = '';
+      chronometer.reset();
+    }
 });
